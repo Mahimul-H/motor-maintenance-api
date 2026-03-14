@@ -5,14 +5,16 @@ A machine learning-powered API for predicting motor failure risks using real-tim
 ## Features
 
 - **Synthetic Data Generation**: Create realistic motor telemetry datasets with configurable noise and sensor drift
-- **Machine Learning Model**: Random Forest classifier trained on voltage, current, temperature, and vibration sensors
-- **RESTful API**: FastAPI-based endpoints for real-time failure predictions
-- **High Accuracy**: Achieves ~95% accuracy on test data with proper feature engineering
-- **Production Ready**: Includes model serialization, input validation, and confidence scoring
+- **Refined Machine Learning Model**: Random Forest classifier with class balancing, feature engineering (voltage deviation, power usage, thermal stress), achieving 99.98% accuracy, 100% ROC-AUC, and 99.97% balanced accuracy
+- **RESTful API**: FastAPI-based endpoints for real-time failure predictions with input validation and confidence scoring
+- **Production Ready**: Includes model serialization, request logging, timestamps, and comprehensive testing
+- **CI/CD**: GitHub Actions for automated testing, model training, and Docker deployment
+- **Containerized**: Docker and Docker Compose support for easy deployment
 
 ## Requirements
 
 - Python 3.8+
+- Docker (optional, for containerized deployment)
 - Dependencies listed in `requirements.txt`
 
 ## Installation
@@ -22,7 +24,7 @@ A machine learning-powered API for predicting motor failure risks using real-tim
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd motor_maintanance_api
+   cd motor-maintenance-api
    ```
 
 2. **Create virtual environment**
@@ -41,7 +43,7 @@ A machine learning-powered API for predicting motor failure risks using real-tim
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
-   cd motor_maintanance_api
+   cd motor-maintenance-api
    ```
 
 2. **Build and run with Docker**
@@ -80,7 +82,7 @@ python data_generator/data_generator.py --rows 50000 --noise-scale 1.2 --drift-a
 
 ## Model Training
 
-Train the Random Forest model on generated data:
+Train the refined Random Forest model on generated data:
 
 ```bash
 python src/train_model.py
@@ -88,9 +90,20 @@ python src/train_model.py
 
 This will:
 - Load data from `data/motor_maintenance_data.csv`
-- Train a Random Forest classifier
+- Apply feature engineering (voltage deviation, power usage, thermal stress)
+- Train a balanced Random Forest classifier
+- Evaluate with accuracy, ROC-AUC, F1-score, and balanced accuracy
 - Save the model to `models/motor_model.pkl`
-- Display accuracy metrics and classification report
+- Save metrics to `models/metrics.pkl`
+
+**Sample Output:**
+```
+✅ Training Complete!
+Accuracy: 99.98%
+ROC-AUC: 100.00%
+F1-Score: 99.94%
+Balanced Accuracy: 99.97%
+```
 
 ## Running the API
 
@@ -98,6 +111,156 @@ Start the FastAPI server:
 
 ```bash
 uvicorn app.main:app --reload
+```
+
+The API will be available at `http://localhost:8000`
+
+## API Usage
+
+### Endpoints
+
+#### GET `/`
+Health check endpoint.
+
+**Response:**
+```json
+{
+  "status": "API is Online",
+  "model": "Random Forest v1"
+}
+```
+
+#### POST `/predict`
+Predict motor failure risk based on sensor data.
+
+**Request Body:**
+```json
+{
+  "voltage_v": 230.0,
+  "current_a": 12.0,
+  "temp_c": 65.0,
+  "vibration_g": 0.08
+}
+```
+
+**Response:**
+```json
+{
+  "failure_prediction": 0,
+  "status": "NORMAL",
+  "confidence": 0.96,
+  "timestamp": "2026-03-15T10:30:00.000Z"
+}
+```
+
+**Validation:**
+- `voltage_v`: 180-280 V
+- `current_a`: 0-30 A
+- `temp_c`: -10-120 °C
+- `vibration_g`: 0-1 g
+
+### Example Usage
+
+Using curl:
+```bash
+curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"voltage_v": 230, "current_a": 12, "temp_c": 65, "vibration_g": 0.08}'
+```
+
+Using Python:
+```python
+import requests
+
+response = requests.post("http://localhost:8000/predict", json={
+    "voltage_v": 230,
+    "current_a": 12,
+    "temp_c": 65,
+    "vibration_g": 0.08
+})
+print(response.json())
+```
+
+## Testing
+
+Run the unit tests to verify functionality:
+
+```bash
+# Install pytest if not already installed
+pip install pytest
+
+# Run tests
+python -m pytest tests/
+```
+
+Tests include:
+- Health check endpoint
+- Normal operation predictions
+- Failure risk predictions
+
+## Deployment
+
+### GitHub Actions
+
+The project includes GitHub Actions workflows for CI/CD:
+
+- **CI** (`.github/workflows/ci.yml`): Runs on every push/PR, executes tests and retrains the model
+- **Deploy** (`.github/workflows/deploy.yml`): Runs on releases, builds and pushes Docker image
+
+To enable deployment:
+1. Set up Docker Hub account
+2. Add repository secrets: `DOCKER_USERNAME` and `DOCKER_PASSWORD`
+3. Create a release to trigger deployment
+
+### Manual Docker Deployment
+
+```bash
+# Build image
+docker build -t your-registry/motor-maintenance-api:latest .
+
+# Push to registry
+docker push your-registry/motor-maintenance-api:latest
+
+# Run on server
+docker run -d -p 8000:8000 your-registry/motor-maintenance-api:latest
+```
+
+## Project Structure
+
+```
+motor-maintenance-api/
+├── app/
+│   └── main.py              # FastAPI application
+├── data/
+│   └── motor_maintenance_data.csv  # Training data
+├── data_generator/
+│   └── data_generator.py    # Synthetic data generation
+├── models/
+│   ├── motor_model.pkl      # Trained model
+│   └── metrics.pkl          # Model performance metrics
+├── src/
+│   └── train_model.py       # Model training script
+├── tests/
+│   └── test_api.py          # Unit tests
+├── .github/
+│   └── workflows/           # GitHub Actions
+├── Dockerfile               # Docker configuration
+├── docker-compose.yml       # Docker Compose
+├── requirements.txt         # Python dependencies
+└── README.md                # This file
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ```
 
 The API will be available at `http://localhost:8000`

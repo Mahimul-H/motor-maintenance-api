@@ -1,0 +1,18 @@
+name: Deploy
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build and push Docker image
+        run: |
+          docker build -t motor-maintenance-api .
+          # Assuming Docker Hub, set up secrets DOCKER_USERNAME and DOCKER_PASSWORD
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker tag motor-maintenance-api ${{ secrets.DOCKER_USERNAME }}/motor-maintenance-api:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/motor-maintenance-api:latest

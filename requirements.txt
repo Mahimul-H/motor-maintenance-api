@@ -4,3 +4,4 @@ joblib
 fastapi
 uvicorn
 python-multipart
+pytest
