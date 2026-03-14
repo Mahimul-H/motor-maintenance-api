@@ -12,4 +12,6 @@ jobs:
           python-version: '3.10'
       - run: pip install -r requirements.txt
       - run: python3 src/train_model.py
-      - run: python3 -m pytest tests/
+      - run: ls -la
+      - run: ls -la models/
+      - run: PYTHONPATH=$PWD python3 -m pytest tests/
