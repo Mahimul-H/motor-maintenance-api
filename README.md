@@ -17,6 +17,8 @@ A machine learning-powered API for predicting motor failure risks using real-tim
 
 ## Installation
 
+### Option 1: Local Development
+
 1. **Clone the repository**
    ```bash
    git clone <repository-url>
@@ -33,6 +35,31 @@ A machine learning-powered API for predicting motor failure risks using real-tim
    ```bash
    pip install -r requirements.txt
    ```
+
+### Option 2: Docker (Recommended)
+
+1. **Clone the repository**
+   ```bash
+   git clone <repository-url>
+   cd motor_maintanance_api
+   ```
+
+2. **Build and run with Docker**
+   ```bash
+   # Build the Docker image
+   docker build -t motor-maintenance-api .
+
+   # Run the container
+   docker run -d -p 8000:8000 --name motor-api motor-maintenance-api
+   ```
+
+3. **Or use Docker Compose**
+   ```bash
+   # If you have docker-compose installed
+   docker-compose up -d
+   ```
+
+The API will be available at `http://localhost:8000`
 
 ## Data Generation
 
@@ -114,6 +141,47 @@ Predict motor failure risk from sensor readings.
 - `failure_prediction`: 0 (normal) or 1 (failure risk)
 - `status`: Human-readable status message
 - `confidence`: Model's confidence score (0.0-1.0)
+
+## Docker Deployment
+
+The application is fully containerized and can be deployed using Docker:
+
+### Build the Image
+```bash
+docker build -t motor-maintenance-api .
+```
+
+### Run the Container
+```bash
+# Run in detached mode
+docker run -d -p 8000:8000 --name motor-api motor-maintenance-api
+
+# Check logs
+docker logs motor-api
+
+# Stop the container
+docker stop motor-api
+```
+
+### Docker Compose
+For easier management, use the provided `docker-compose.yml`:
+
+```bash
+# Start the service
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop the service
+docker-compose down
+```
+
+### Container Features
+- **Automatic Setup**: Data generation and model training happen during build
+- **Port Mapping**: API exposed on port 8000
+- **Health Checks**: Built-in health monitoring
+- **Volume Mounting**: Models and data directories are mounted for persistence
 
 ## Project Structure
 

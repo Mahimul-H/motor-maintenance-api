@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  motor-maintenance-api:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      # Mount the models directory to persist trained models
+      - ./models:/app/models
+      # Mount data directory for generated data
+      - ./data:/app/data
+    environment:
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
