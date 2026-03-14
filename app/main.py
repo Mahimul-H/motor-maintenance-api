@@ -37,6 +37,6 @@ def predict_failure(data: MotorFeatures):
     
     return {
         "failure_prediction": int(prediction),
-        "status": "🚨 FAILURE RISK" if prediction == 1 else "✅ NORMAL",
+        "status": "FAILURE RISK" if prediction == 1 else "NORMAL",
         "confidence": round(float(probability), 4)
     }

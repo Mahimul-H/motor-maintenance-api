@@ -14,7 +14,7 @@ MODEL_PATH = os.path.join(MODEL_DIR, "motor_model.pkl")
 os.makedirs(MODEL_DIR, exist_ok=True)
 
 def train_pipeline():
-    print("🚀 Loading 100,000 rows of telemetry data...")
+    print("Loading 100,000 rows of telemetry data...")
     df = pd.read_csv(DATA_PATH)
     
     # 2. Define Features and Target
@@ -25,7 +25,7 @@ def train_pipeline():
     # 3. Split (80% for training, 20% for testing the model's 'intelligence')
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
     
-    print("🧠 Training Random Forest Model...")
+    print("Training Random Forest Model...")
     # Random Forest is excellent for sensor data because it handles outliers well
     model = RandomForestClassifier(n_estimators=100, max_depth=10, random_state=42)
     model.fit(X_train, y_train)
@@ -34,13 +34,13 @@ def train_pipeline():
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
     
-    print(f"\n✅ Training Complete!")
+    print(f"\nTraining Complete!")
     print(f"Accuracy: {acc:.2%}")
     print("\nDetailed Report:\n", classification_report(y_test, y_pred))
     
     # 5. Export the 'Brain'
     joblib.dump(model, MODEL_PATH)
-    print(f"\n Model saved to: {MODEL_PATH}")
+    print(f"\nModel saved to: {MODEL_PATH}")
 
 if __name__ == "__main__":
     train_pipeline()

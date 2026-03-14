@@ -48,8 +48,8 @@ df = pd.DataFrame({
 df.to_csv(file_path, index=False)
 
 print("-" * 30)
-print(f" Success! File saved to: {file_path}")
-print(f" Dataset Summary:")
+print(f"Success! File saved to: {file_path}")
+print(f"Dataset Summary:")
 print(f"   - Total Rows: {len(df)}")
 print(f"   - Failures Detected: {df['failure'].sum()} ({df['failure'].mean()*100:.2f}%)")
 print("-" * 30)

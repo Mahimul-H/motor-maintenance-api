@@ -2,7 +2,7 @@
 
 A machine learning-powered API for predicting motor failure risks using real-time sensor telemetry data. Built with FastAPI and scikit-learn for reliable, scalable predictive maintenance.
 
-## 🚀 Features
+## Features
 
 - **Synthetic Data Generation**: Create realistic motor telemetry datasets with configurable noise and sensor drift
 - **Machine Learning Model**: Random Forest classifier trained on voltage, current, temperature, and vibration sensors
@@ -10,12 +10,12 @@ A machine learning-powered API for predicting motor failure risks using real-tim
 - **High Accuracy**: Achieves ~95% accuracy on test data with proper feature engineering
 - **Production Ready**: Includes model serialization, input validation, and confidence scoring
 
-## 📋 Requirements
+## Requirements
 
 - Python 3.8+
 - Dependencies listed in `requirements.txt`
 
-## 🛠 Installation
+## Installation
 
 1. **Clone the repository**
    ```bash
@@ -34,7 +34,7 @@ A machine learning-powered API for predicting motor failure risks using real-tim
    pip install -r requirements.txt
    ```
 
-## 📊 Data Generation
+## Data Generation
 
 Generate synthetic motor telemetry data for training and testing:
 
@@ -51,7 +51,7 @@ python data_generator/data_generator.py --rows 50000 --noise-scale 1.2 --drift-a
 - `--noise-scale`: Add measurement noise (1.0 = no extra noise)
 - `--drift-amount`: Simulate sensor drift over time (0.0 = no drift)
 
-## 🧠 Model Training
+## Model Training
 
 Train the Random Forest model on generated data:
 
@@ -65,7 +65,7 @@ This will:
 - Save the model to `models/motor_model.pkl`
 - Display accuracy metrics and classification report
 
-## 🌐 Running the API
+## Running the API
 
 Start the FastAPI server:
 
@@ -105,7 +105,7 @@ Predict motor failure risk from sensor readings.
 ```json
 {
   "failure_prediction": 1,
-  "status": "🚨 FAILURE RISK",
+  "status": "FAILURE RISK",
   "confidence": 0.8923
 }
 ```
@@ -115,7 +115,7 @@ Predict motor failure risk from sensor readings.
 - `status`: Human-readable status message
 - `confidence`: Model's confidence score (0.0-1.0)
 
-## 📁 Project Structure
+## Project Structure
 
 ```
 motor_maintanance_api/
@@ -132,7 +132,7 @@ motor_maintanance_api/
 └── README.md                  # This file
 ```
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
@@ -140,10 +140,10 @@ motor_maintanance_api/
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📞 Support
+## Support
 
 For questions or issues, please open a GitHub issue or contact the maintainers.
