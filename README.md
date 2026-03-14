@@ -1,6 +1,6 @@
 # Motor Maintenance Prediction API
 
-A machine learning-powered API for predicting motor failure risks using real-time sensor telemetry data. Built with FastAPI and scikit-learn for reliable, scalable predictive maintenance.
+This project implements a predictive maintenance API for industrial motors, utilizing machine learning to assess failure risks based on real-time sensor telemetry data. Developed with FastAPI for high-performance web services and scikit-learn for robust model training, it provides scalable and reliable maintenance predictions.
 
 ## Features
 
@@ -98,7 +98,7 @@ This will:
 
 **Sample Output:**
 ```
-✅ Training Complete!
+Training Complete!
 Accuracy: 99.98%
 ROC-AUC: 100.00%
 F1-Score: 99.94%
